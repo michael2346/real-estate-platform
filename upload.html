@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>List Your Property - HomeConnect</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header" id="header">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <i class="fas fa-home"></i>
+        Home<span>Connect</span>
+      </a>
+      
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="properties.html">Properties</a>
+        <a href="upload.html" class="active">List Your Property</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      
+      <div class="header-actions">
+        <a href="login.html" class="btn btn-primary">Sign In</a>
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+  
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="properties.html">Properties</a>
+    <a href="upload.html">List Your Property</a>
+    <a href="contact.html">Contact</a>
+    <a href="login.html">Sign In</a>
+  </div>
+
+  <!-- Upload Section -->
+  <section class="upload-section">
+    <div class="container">
+      <div class="form-container">
+        <h2><i class="fas fa-upload" style="color: var(--primary-color);"></i> List Your Property</h2>
+        <p>Fill in the details below to list your property on HomeConnect</p>
+        
+        <form id="propertyForm" onsubmit="handlePropertyUpload(event)">
+          <!-- Owner Information -->
+          <h3 style="font-size: 18px; margin: 30px 0 20px; color: var(--secondary-color); border-bottom: 2px solid var(--border-color); padding-bottom: 10px;">
+            <i class="fas fa-user" style="color: var(--primary-color);"></i> Owner Information
+          </h3>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Full Name <span>*</span></label>
+              <input type="text" id="ownerName" placeholder="Enter your full name" required>
+            </div>
+            <div class="form-group">
+              <label>Phone Number <span>*</span></label>
+              <input type="tel" id="ownerPhone" placeholder="e.g., 07087008275" required>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>Email Address <span>*</span></label>
+            <input type="email" id="ownerEmail" placeholder="Enter your email address" required>
+          </div>
+          
+          <!-- Property Information -->
+          <h3 style="font-size: 18px; margin: 30px 0 20px; color: var(--secondary-color); border-bottom: 2px solid var(--border-color); padding-bottom: 10px;">
+            <i class="fas fa-home" style="color: var(--primary-color);"></i> Property Information
+          </h3>
+          
+          <div class="form-group">
+            <label>Property Title <span>*</span></label>
+            <input type="text" id="propertyTitle" placeholder="e.g., Luxury 4 Bedroom Duplex in Lekki" required>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Property Type <span>*</span></label>
+              <select id="propertyType" required>
+                <option value="">Select type</option>
+                <option value="house">House</option>
+                <option value="apartment">Apartment</option>
+                <option value="duplex">Duplex</option>
+                <option value="bungalow">Bungalow</option>
+                <option value="land">Land</option>
+                <option value="commercial">Commercial Property</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Listing Type <span>*</span></label>
+              <select id="listingType" required>
+                <option value="">Select type</option>
+                <option value="sale">For Sale</option>
+                <option value="rent">For Rent</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Price (₦) <span>*</span></label>
+              <input type="number" id="propertyPrice" placeholder="e.g., 5000000" required>
+            </div>
+            <div class="form-group">
+              <label>Negotiable?</label>
+              <select id="negotiable">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Bedrooms</label>
+              <input type="number" id="bedrooms" placeholder="e.g., 3" min="0">
+            </div>
+            <div class="form-group">
+              <label>Bathrooms</label>
+              <input type="number" id="bathrooms" placeholder="e.g., 2" min="0">
+            </div>
+            <div class="form-group">
+              <label>Property Size (sqm)</label>
+              <input type="number" id="propertySize" placeholder="e.g., 500" min="0">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>Location/Address <span>*</span></label>
+            <input type="text" id="propertyLocation" placeholder="e.g., Lekki Phase 1, Lagos" required>
+          </div>
+          
+          <div class="form-group">
+            <label>State <span>*</span></label>
+            <select id="propertyState" required>
+              <option value="">Select state</option>
+              <option value="lagos">Lagos</option>
+              <option value="abuja">Abuja FCT</option>
+              <option value="rivers">Rivers</option>
+              <option value="oyo">Oyo</option>
+              <option value="kano">Kano</option>
+              <option value="delta">Delta</option>
+              <option value="imo">Imo</option>
+              <option value="anambra">Anambra</option>
+              <option value="enugu">Enugu</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>Property Description <span>*</span></label>
+            <textarea id="propertyDescription" placeholder="Describe your property in detail. Include features, amenities, nearby landmarks, etc." required></textarea>
+          </div>
+          
+          <!-- Property Images -->
+          <h3 style="font-size: 18px; margin: 30px 0 20px; color: var(--secondary-color); border-bottom: 2px solid var(--border-color); padding-bottom: 10px;">
+            <i class="fas fa-images" style="color: var(--primary-color);"></i> Property Images
+          </h3>
+          
+          <div class="form-group">
+            <label>Upload Images <span>*</span> (Max 5 images)</label>
+            <div class="image-upload" onclick="document.getElementById('propertyImages').click()">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <p>Click to upload images</p>
+              <span>Supported formats: JPG, PNG (Max 5MB each)</span>
+            </div>
+            <input type="file" id="propertyImages" accept="image/*" multiple style="display: none;" onchange="handleImagePreview(this)">
+            <div id="imagePreview" style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;"></div>
+          </div>
+          
+          <!-- Commission Information -->
+          <div class="commission-info">
+            <h4><i class="fas fa-info-circle"></i> Commission Information</h4>
+            <p>HomeConnect charges buyers a small commission fee to access your contact information. This ensures serious inquiries only. You pay <strong>NOTHING</strong> to list your property!</p>
+            <ul>
+              <li>Properties under ₦5 Million: Buyers pay ₦5,000</li>
+              <li>Properties ₦5 Million - ₦20 Million: Buyers pay ₦10,000</li>
+              <li>Properties above ₦20 Million: Buyers pay ₦20,000</li>
+            </ul>
+            <p style="margin-top: 15px;"><strong>Your Contact:</strong> 07087008275, 08127372476 | chuksmichael16@gmail.com</p>
+          </div>
+          
+          <!-- Terms -->
+          <div class="form-group">
+            <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-weight: normal;">
+              <input type="checkbox" id="agreeTerms" required style="width: auto; margin-top: 5px;">
+              <span style="font-size: 14px;">I confirm that I am the legal owner or authorized representative of this property. I agree to the <a href="#" style="color: var(--primary-color);">Terms of Service</a> and <a href="#" style="color: var(--primary-color);">Listing Agreement</a>.</span>
+            </label>
+          </div>
+          
+          <button type="submit" class="btn btn-primary btn-full" style="padding: 16px;">
+            <i class="fas fa-paper-plane"></i>
+            Submit Property Listing
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer" style="padding: 30px 0;">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+        <p>&copy; 2024 HomeConnect. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Header scroll effect
+    window.addEventListener('scroll', function() {
+      const header = document.getElementById('header');
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+    if (!localStorage.getItem("token")) {
+  alert("Please sign in first.");
+  window.location.href = "login.html";
+}
+
+
+    // Mobile menu toggle
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      mobileMenu.classList.toggle('active');
+    }
+
+    // Handle image preview
+    function handleImagePreview(input) {
+      const preview = document.getElementById('imagePreview');
+      preview.innerHTML = '';
+      
+      if (input.files && input.files.length > 0) {
+        if (input.files.length > 5) {
+          alert('You can only upload up to 5 images.');
+          input.value = '';
+          return;
+        }
+        
+        Array.from(input.files).forEach(file => {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const div = document.createElement('div');
+            div.style.cssText = 'position: relative; width: 100px; height: 100px;';
+            div.innerHTML = `
+              <img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+              <button type="button" onclick="this.parentElement.remove()" style="position: absolute; top: -8px; right: -8px; width: 24px; height: 24px; background: var(--error-color); color: white; border: none; border-radius: 50%; cursor: pointer; font-size: 12px;">
+                <i class="fas fa-times"></i>
+              </button>
+            `;
+            preview.appendChild(div);
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+    }
+
+    // Handle property upload
+    function handlePropertyUpload(event) {
+      event.preventDefault();
+      
+      // Get form values
+      const ownerName = document.getElementById('ownerName').value;
+      const ownerPhone = document.getElementById('ownerPhone').value;
+      const ownerEmail = document.getElementById('ownerEmail').value;
+      const propertyTitle = document.getElementById('propertyTitle').value;
+      const propertyType = document.getElementById('propertyType').value;
+      const listingType = document.getElementById('listingType').value;
+      const propertyPrice = document.getElementById('propertyPrice').value;
+      const propertyLocation = document.getElementById('propertyLocation').value;
+      const propertyDescription = document.getElementById('propertyDescription').value;
+      const images = document.getElementById('propertyImages').files;
+      
+      // Validation
+      if (images.length === 0) {
+        alert('Please upload at least one property image.');
+        return;
+      }
+      
+      // In a real application, this would send data to a server
+      // For demo purposes, we'll store in localStorage and show success message
+      const propertyData = {
+        id: Date.now(),
+        ownerName,
+        ownerPhone,
+        ownerEmail,
+        title: propertyTitle,
+        type: propertyType,
+        listingType,
+        price: parseFloat(propertyPrice),
+        location: propertyLocation,
+        description: propertyDescription,
+        date: new Date().toISOString(),
+        status: 'pending'
+      };
+      
+      // Save to localStorage (in real app, this would be a database)
+      let properties = JSON.parse(localStorage.getItem('properties') || '[]');
+      properties.push(propertyData);
+      localStorage.setItem('properties', JSON.stringify(properties));
+      
+      alert('Property submitted successfully! Your listing will be reviewed and published shortly.');
+      
+      // Reset form
+      document.getElementById('propertyForm').reset();
+      document.getElementById('imagePreview').innerHTML = '';
+      
+      // Redirect to properties page
+      window.location.href = 'properties.html';
+    }
+  </script>
+  <script src="auth.js"></script>
+<script>
+  updateHeaderAuthUI();
+</script>
+
+</body>
+</html>

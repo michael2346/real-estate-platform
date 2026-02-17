@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HomeConnect - Find Your Perfect Home</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header" id="header">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <i class="fas fa-home"></i>
+        Home<span>Connect</span>
+      </a>
+      
+      <nav class="nav">
+        <a href="index.html" class="active">Home</a>
+        <a href="properties.html">Properties</a>
+        <a href="upload.html">List Your Property</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      
+      <div class="header-actions" id="headerActions">
+        <a href="login.html" class="btn btn-primary" id="signInBtn">Sign In</a>
+        <div id="userMenu" style="display: none; align-items: center; gap: 15px;">
+          <span id="userName" style="font-weight: 500;"></span>
+          <button onclick="logout()" class="btn btn-outline" style="padding: 8px 16px; font-size: 13px;">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </div>
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+  
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="properties.html">Properties</a>
+    <a href="upload.html">List Your Property</a>
+    <a href="contact.html">Contact</a>
+    <a href="login.html" id="mobileSignIn">Sign In</a>
+    <a href="#" id="mobileLogout" onclick="logout()" style="display: none; color: var(--error-color);">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Find Your <span>Dream Home</span> Today</h1>
+      <p>Connect directly with property owners. No middlemen, no hidden fees. Browse verified listings and make your dream a reality.</p>
+      <div class="hero-buttons">
+        <a href="properties.html" class="btn btn-primary">
+          <i class="fas fa-search"></i>
+          Browse Properties
+        </a>
+        <a href="upload.html" class="btn btn-outline">
+          <i class="fas fa-plus"></i>
+          List Your Property
+        </a>
+      </div>
+      
+      <div class="hero-stats">
+        <div class="stat-item">
+          <h3 id="statProperties">0</h3>
+          <p>Properties Listed</p>
+        </div>
+        <div class="stat-item">
+          <h3 id="statOwners">0</h3>
+          <p>Happy Owners</p>
+        </div>
+        <div class="stat-item">
+          <h3 id="statBuyers">0</h3>
+          <p>Successful Deals</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="section how-it-works">
+    <div class="container">
+      <div class="section-header">
+        <h2>How It <span>Works</span></h2>
+        <p>Simple steps to find or list your property</p>
+      </div>
+      
+      <div class="steps">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <i class="fas fa-user-plus"></i>
+          <h3>Create Account</h3>
+          <p>Sign up as a buyer or property owner. It's quick, easy, and completely free.</p>
+        </div>
+        
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <i class="fas fa-home"></i>
+          <h3>List or Browse</h3>
+          <p>Owners can upload property details with photos. Buyers can browse verified listings.</p>
+        </div>
+        
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <i class="fas fa-handshake"></i>
+          <h3>Connect Directly</h3>
+          <p>Buyers pay a small commission to unlock owner contact details and arrange viewings.</p>
+        </div>
+        
+        <div class="step-card">
+          <div class="step-number">4</div>
+          <i class="fas fa-key"></i>
+          <h3>Close the Deal</h3>
+          <p>Meet the owner, view the property, and finalize your transaction directly.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Commission Structure -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Our <span>Commission</span> Structure</h2>
+        <p>Transparent pricing for buyers to connect with property owners</p>
+      </div>
+      
+      <div class="commission-info">
+        <h4><i class="fas fa-info-circle"></i> How Our Commission Works</h4>
+        <p>To ensure serious inquiries and protect property owners, buyers pay a small commission fee to access owner contact information:</p>
+        <ul>
+          <li><strong>Properties under ₦5 Million:</strong> ₦5,000 commission fee</li>
+          <li><strong>Properties ₦5 Million - ₦20 Million:</strong> ₦10,000 commission fee</li>
+          <li><strong>Properties above ₦20 Million:</strong> ₦20,000 commission fee</li>
+        </ul>
+        <p style="margin-top: 15px;"><strong>Note:</strong> This fee is only charged when you request to contact the property owner. Browsing listings is completely FREE!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="section testimonials">
+    <div class="container">
+      <div class="section-header">
+        <h2>What Our <span>Users Say</span></h2>
+        <p>Real stories from satisfied buyers and sellers</p>
+      </div>
+      
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+          <p class="testimonial-text">I found my dream apartment within a week of using HomeConnect. The process was smooth, and dealing directly with the owner made everything so much easier. Highly recommended!</p>
+          <div class="testimonial-author">
+            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Chioma Okafor">
+            <div>
+              <h4>Chioma Okafor</h4>
+              <p>Property Buyer, Lagos</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="testimonial-card">
+          <div class="testimonial-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+          <p class="testimonial-text">As a property owner, I was tired of dealing with agents who never delivered. HomeConnect connected me with serious buyers, and I sold my house in just two weeks!</p>
+          <div class="testimonial-author">
+            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Emmanuel Nwosu">
+            <div>
+              <h4>Emmanuel Nwosu</h4>
+              <p>Property Owner, Abuja</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="testimonial-card">
+          <div class="testimonial-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+          <p class="testimonial-text">The commission fee is so worth it! I got direct access to the owner, viewed the property the same day, and closed the deal within a month. No agent drama, no hidden charges.</p>
+          <div class="testimonial-author">
+            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Amina Ibrahim">
+            <div>
+              <h4>Amina Ibrahim</h4>
+              <p>Property Buyer, Kano</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="section" style="background: linear-gradient(135deg, var(--secondary-color), var(--accent-color)); color: white;">
+    <div class="container" style="text-align: center;">
+      <h2 style="color: white; margin-bottom: 20px;">Ready to Get Started?</h2>
+      <p style="opacity: 0.9; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto;">Whether you're looking to buy, sell, or rent, HomeConnect is your trusted platform for direct property transactions.</p>
+      <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+        <a href="properties.html" class="btn btn-primary" style="background: var(--primary-color);">
+          <i class="fas fa-search"></i>
+          Find a Property
+        </a>
+        <a href="upload.html" class="btn btn-outline" style="border-color: white; color: white;">
+          <i class="fas fa-upload"></i>
+          List Your Property
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">
+            <i class="fas fa-home"></i>
+            Home<span>Connect</span>
+          </a>
+          <p>Your trusted platform for direct property transactions. Connect with property owners and find your dream home without middlemen.</p>
+          <div class="footer-social">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        
+        <div>
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="properties.html">Properties</a></li>
+            <li><a href="upload.html">List Property</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4>Services</h4>
+          <ul class="footer-links">
+            <li><a href="#">Buy Property</a></li>
+            <li><a href="#">Sell Property</a></li>
+            <li><a href="#">Rent Property</a></li>
+            <li><a href="#">Property Valuation</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4>Contact Us</h4>
+          <ul class="footer-contact">
+            <li>
+              <i class="fas fa-phone"></i>
+              <div>
+                <div>07087008275</div>
+                <div>08127372476</div>
+              </div>
+            </li>
+            <li>
+              <i class="fas fa-envelope"></i>
+              <span>chuksmichael16@gmail.com</span>
+            </li>
+            <li>
+              <i class="fas fa-map-marker-alt"></i>
+              <span>Nigeria</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2024 HomeConnect. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Header scroll effect
+    window.addEventListener('scroll', function() {
+      const header = document.getElementById('header');
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // Mobile menu toggle
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      mobileMenu.classList.toggle('active');
+    }
+
+    // Animated counter
+    function animateCounter(elementId, target, duration = 2000) {
+      const element = document.getElementById(elementId);
+      if (!element) return;
+      
+      let start = 0;
+      const increment = target / (duration / 16);
+      
+      function updateCounter() {
+        start += increment;
+        if (start < target) {
+          element.textContent = Math.floor(start);
+          requestAnimationFrame(updateCounter);
+        } else {
+          element.textContent = target;
+        }
+      }
+      
+      updateCounter();
+    }
+
+    // Start counters when page loads
+    window.addEventListener('load', function() {
+      setTimeout(() => {
+        animateCounter('statProperties', 150);
+        animateCounter('statOwners', 89);
+        animateCounter('statBuyers', 234);
+      }, 500);
+      
+      // Check if user is logged in
+      checkUserLogin();
+    });
+    
+    // Check user login status
+    function checkUserLogin() {
+      const token = localStorage.getItem('token');
+      const user = JSON.parse(localStorage.getItem('user') || 'null');
+      
+      const signInBtn = document.getElementById('signInBtn');
+      const userMenu = document.getElementById('userMenu');
+      const userName = document.getElementById('userName');
+      const mobileSignIn = document.getElementById('mobileSignIn');
+      const mobileLogout = document.getElementById('mobileLogout');
+      
+      if (token && user) {
+        // User is logged in
+        signInBtn.style.display = 'none';
+        userMenu.style.display = 'flex';
+        userName.textContent = `Hello, ${user.firstName}`;
+        if (mobileSignIn) mobileSignIn.style.display = 'none';
+        if (mobileLogout) mobileLogout.style.display = 'block';
+      } else {
+        // User is not logged in
+        signInBtn.style.display = 'block';
+        userMenu.style.display = 'none';
+        if (mobileSignIn) mobileSignIn.style.display = 'block';
+        if (mobileLogout) mobileLogout.style.display = 'none';
+      }
+    }
+    
+    // Logout function
+    function logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      alert('You have been logged out.');
+      window.location.reload();
+    }
+  </script>
+  <script src="auth.js"></script>
+<script>
+  updateHeaderAuthUI();
+</script>
+
+</body>
+</html>

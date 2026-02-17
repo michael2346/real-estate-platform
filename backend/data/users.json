@@ -1,0 +1,24 @@
+[
+  {
+    "id": "216eef6d-1bae-44d9-af22-d148ef0ff71c",
+    "firstName": "Chukwudi",
+    "lastName": "Nwite",
+    "email": "chuksmichael16@gmail.com",
+    "phone": "07087008275",
+    "userType": "owner",
+    "password": "$2b$10$z.ZFFBWjre5fkAQMggshBuhAACdex/DduxOpwqBi5WypQ6Q9YR52.",
+    "createdAt": "2026-02-17T07:43:29.044Z",
+    "isActive": true
+  },
+  {
+    "id": "f5931b06-4662-4b54-8a3d-86c0dc04ee5b",
+    "firstName": "Sarah",
+    "lastName": "Michael",
+    "email": "micksarah78@gmail.com",
+    "phone": "07073021463",
+    "userType": "owner",
+    "password": "$2b$10$3r2IgwxOYIoorqzEgjFWZe1mg2JCnv/0WsqyNr2mJcdmaV.DVGaci",
+    "createdAt": "2026-02-17T11:41:31.964Z",
+    "isActive": true
+  }
+]

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - HomeConnect</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header" id="header">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <i class="fas fa-home"></i>
+        Home<span>Connect</span>
+      </a>
+      
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="properties.html">Properties</a>
+        <a href="upload.html">List Your Property</a>
+        <a href="contact.html" class="active">Contact</a>
+      </nav>
+      
+      <div class="header-actions">
+        <a href="login.html" class="btn btn-primary">Sign In</a>
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+  
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="properties.html">Properties</a>
+    <a href="upload.html">List Your Property</a>
+    <a href="contact.html">Contact</a>
+    <a href="login.html">Sign In</a>
+  </div>
+
+  <!-- Contact Section -->
+  <section class="contact-section">
+    <div class="container">
+      <div class="contact-grid">
+        <!-- Contact Info -->
+        <div class="contact-info">
+          <h2>Get In <span>Touch</span></h2>
+          <p>Have questions or need assistance? We're here to help! Reach out to us through any of the channels below.</p>
+          
+          <div class="contact-cards">
+            <div class="contact-card">
+              <i class="fas fa-phone-alt"></i>
+              <div>
+                <h4>Phone Numbers</h4>
+                <p>07087008275</p>
+                <p>08127372476</p>
+              </div>
+            </div>
+            
+            <div class="contact-card">
+              <i class="fas fa-envelope"></i>
+              <div>
+                <h4>Email Address</h4>
+                <p>chuksmichael16@gmail.com</p>
+              </div>
+            </div>
+            
+            <div class="contact-card">
+              <i class="fas fa-map-marker-alt"></i>
+              <div>
+                <h4>Location</h4>
+                <p>Nigeria</p>
+              </div>
+            </div>
+            
+            <div class="contact-card">
+              <i class="fas fa-clock"></i>
+              <div>
+                <h4>Business Hours</h4>
+                <p>Monday - Friday: 8:00 AM - 6:00 PM</p>
+                <p>Saturday: 9:00 AM - 4:00 PM</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Social Media -->
+          <div style="margin-top: 30px;">
+            <h4 style="margin-bottom: 15px;">Follow Us</h4>
+            <div class="footer-social">
+              <a href="#" style="width: 45px; height: 45px; background: var(--primary-color);"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" style="width: 45px; height: 45px; background: var(--primary-color);"><i class="fab fa-twitter"></i></a>
+              <a href="#" style="width: 45px; height: 45px; background: var(--primary-color);"><i class="fab fa-instagram"></i></a>
+              <a href="#" style="width: 45px; height: 45px; background: var(--primary-color);"><i class="fab fa-whatsapp"></i></a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Contact Form -->
+        <div class="contact-form-wrapper">
+          <h3>Send Us a Message</h3>
+          
+          <form id="contactForm" onsubmit="handleContactSubmit(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label>First Name <span>*</span></label>
+                <input type="text" id="firstName" placeholder="Your first name" required>
+              </div>
+              <div class="form-group">
+                <label>Last Name <span>*</span></label>
+                <input type="text" id="lastName" placeholder="Your last name" required>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label>Email Address <span>*</span></label>
+              <input type="email" id="email" placeholder="Your email address" required>
+            </div>
+            
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input type="tel" id="phone" placeholder="Your phone number">
+            </div>
+            
+            <div class="form-group">
+              <label>Subject <span>*</span></label>
+              <select id="subject" required>
+                <option value="">Select a subject</option>
+                <option value="general">General Inquiry</option>
+                <option value="listing">Property Listing</option>
+                <option value="payment">Payment Issue</option>
+                <option value="complaint">Complaint</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label>Message <span>*</span></label>
+              <textarea id="message" placeholder="How can we help you?" required></textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-full">
+              <i class="fas fa-paper-plane"></i>
+              Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Map Section -->
+  <section style="padding: 0;">
+    <div style="width: 100%; height: 400px; background: linear-gradient(135deg, var(--light-bg), rgba(212, 175, 55, 0.1)); display: flex; align-items: center; justify-content: center;">
+      <div style="text-align: center;">
+        <i class="fas fa-map-marked-alt" style="font-size: 64px; color: var(--primary-color); margin-bottom: 20px;"></i>
+        <h3 style="color: var(--secondary-color); margin-bottom: 10px;">Serving All of Nigeria</h3>
+        <p style="color: var(--text-light);">We connect property buyers and sellers across all 36 states</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="section" style="background: var(--light-bg);">
+    <div class="container">
+      <div class="section-header">
+        <h2>Frequently Asked <span>Questions</span></h2>
+        <p>Find answers to common questions about HomeConnect</p>
+      </div>
+      
+      <div style="max-width: 800px; margin: 0 auto;">
+        <div style="background: white; padding: 25px; border-radius: 12px; margin-bottom: 15px; box-shadow: var(--shadow);">
+          <h4 style="color: var(--secondary-color); margin-bottom: 10px;"><i class="fas fa-question-circle" style="color: var(--primary-color); margin-right: 10px;"></i> How does the commission system work?</h4>
+          <p style="color: var(--text-light); font-size: 14px;">Buyers pay a small commission fee to unlock owner contact details. This fee varies based on property price: ₦5,000 for properties under ₦5M, ₦10,000 for ₦5M-₦20M, and ₦20,000 for properties above ₦20M.</p>
+        </div>
+        
+        <div style="background: white; padding: 25px; border-radius: 12px; margin-bottom: 15px; box-shadow: var(--shadow);">
+          <h4 style="color: var(--secondary-color); margin-bottom: 10px;"><i class="fas fa-question-circle" style="color: var(--primary-color); margin-right: 10px;"></i> Is it free to list my property?</h4>
+          <p style="color: var(--text-light); font-size: 14px;">Yes! Listing your property on HomeConnect is completely FREE. We only charge buyers a commission fee to contact you, ensuring you get serious inquiries only.</p>
+        </div>
+        
+        <div style="background: white; padding: 25px; border-radius: 12px; margin-bottom: 15px; box-shadow: var(--shadow);">
+          <h4 style="color: var(--secondary-color); margin-bottom: 10px;"><i class="fas fa-question-circle" style="color: var(--primary-color); margin-right: 10px;"></i> How long does it take for my listing to go live?</h4>
+          <p style="color: var(--text-light); font-size: 14px;">All listings are reviewed within 24 hours. Once approved, your property will be visible to all potential buyers on our platform.</p>
+        </div>
+        
+        <div style="background: white; padding: 25px; border-radius: 12px; margin-bottom: 15px; box-shadow: var(--shadow);">
+          <h4 style="color: var(--secondary-color); margin-bottom: 10px;"><i class="fas fa-question-circle" style="color: var(--primary-color); margin-right: 10px;"></i> Can I edit or remove my listing?</h4>
+          <p style="color: var(--text-light); font-size: 14px;">Yes, you can edit or remove your listing at any time by logging into your account and accessing your dashboard.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">
+            <i class="fas fa-home"></i>
+            Home<span>Connect</span>
+          </a>
+          <p>Your trusted platform for direct property transactions. Connect with property owners and find your dream home without middlemen.</p>
+          <div class="footer-social">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        
+        <div>
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="properties.html">Properties</a></li>
+            <li><a href="upload.html">List Property</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4>Services</h4>
+          <ul class="footer-links">
+            <li><a href="#">Buy Property</a></li>
+            <li><a href="#">Sell Property</a></li>
+            <li><a href="#">Rent Property</a></li>
+            <li><a href="#">Property Valuation</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4>Contact Us</h4>
+          <ul class="footer-contact">
+            <li>
+              <i class="fas fa-phone"></i>
+              <div>
+                <div>07087008275</div>
+                <div>08127372476</div>
+              </div>
+            </li>
+            <li>
+              <i class="fas fa-envelope"></i>
+              <span>chuksmichael16@gmail.com</span>
+            </li>
+            <li>
+              <i class="fas fa-map-marker-alt"></i>
+              <span>Nigeria</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2024 HomeConnect. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Header scroll effect
+    window.addEventListener('scroll', function() {
+      const header = document.getElementById('header');
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // Mobile menu toggle
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      mobileMenu.classList.toggle('active');
+    }
+
+    // Handle contact form submission
+    function handleContactSubmit(event) {
+      event.preventDefault();
+      
+      const firstName = document.getElementById('firstName').value;
+      const lastName = document.getElementById('lastName').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+      const subject = document.getElementById('subject').value;
+      const message = document.getElementById('message').value;
+      
+      // In a real application, this would send data to a server
+      alert(`Thank you for your message, ${firstName}!\n\nWe have received your inquiry and will get back to you within 24 hours.\n\nFor urgent matters, please call us directly at:\n07087008275 or 08127372476`);
+      
+      // Reset form
+      document.getElementById('contactForm').reset();
+    }
+  </script>
+  <script src="auth.js"></script>
+<script>
+  updateHeaderAuthUI();
+</script>
+
+</body>
+</html>

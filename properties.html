@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Properties - HomeConnect</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header" id="header">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <i class="fas fa-home"></i>
+        Home<span>Connect</span>
+      </a>
+      
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="properties.html" class="active">Properties</a>
+        <a href="upload.html">List Your Property</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      
+      <div class="header-actions">
+        <a href="login.html" class="btn btn-primary">Sign In</a>
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+  
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="properties.html">Properties</a>
+    <a href="upload.html">List Your Property</a>
+    <a href="contact.html">Contact</a>
+    <a href="login.html">Sign In</a>
+  </div>
+
+  <!-- Properties Section -->
+  <section class="section" style="margin-top: 70px;">
+    <div class="container">
+      <div class="section-header">
+        <h2>Available <span>Properties</span></h2>
+        <p>Browse verified properties listed directly by owners</p>
+      </div>
+      
+      <!-- Filters -->
+      <div style="background: var(--light-bg); padding: 25px; border-radius: 12px; margin-bottom: 40px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label style="font-size: 13px; margin-bottom: 5px;">Property Type</label>
+            <select id="filterType" onchange="filterProperties()">
+              <option value="">All Types</option>
+              <option value="house">House</option>
+              <option value="apartment">Apartment</option>
+              <option value="duplex">Duplex</option>
+              <option value="bungalow">Bungalow</option>
+              <option value="land">Land</option>
+              <option value="commercial">Commercial</option>
+            </select>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 0;">
+            <label style="font-size: 13px; margin-bottom: 5px;">Listing Type</label>
+            <select id="filterListing" onchange="filterProperties()">
+              <option value="">All Listings</option>
+              <option value="sale">For Sale</option>
+              <option value="rent">For Rent</option>
+            </select>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 0;">
+            <label style="font-size: 13px; margin-bottom: 5px;">State</label>
+            <select id="filterState" onchange="filterProperties()">
+              <option value="">All States</option>
+              <option value="lagos">Lagos</option>
+              <option value="abuja">Abuja FCT</option>
+              <option value="rivers">Rivers</option>
+              <option value="oyo">Oyo</option>
+              <option value="kano">Kano</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 0;">
+            <label style="font-size: 13px; margin-bottom: 5px;">Max Price (₦)</label>
+            <input type="number" id="filterPrice" placeholder="e.g., 10000000" onchange="filterProperties()">
+          </div>
+        </div>
+        
+        <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
+          <button class="btn btn-primary" onclick="filterProperties()">
+            <i class="fas fa-filter"></i>
+            Apply Filters
+          </button>
+          <button class="btn btn-outline" onclick="clearFilters()">
+            <i class="fas fa-times"></i>
+            Clear Filters
+          </button>
+        </div>
+      </div>
+      
+      <!-- Results Count -->
+      <div style="margin-bottom: 25px;">
+        <p style="color: var(--text-light);">Showing <strong id="resultsCount">0</strong> properties</p>
+      </div>
+      
+      <!-- Properties Grid -->
+      <div id="propertiesGrid" class="properties-grid">
+        <!-- Properties will be loaded here -->
+      </div>
+      
+      <!-- Empty State -->
+      <div id="emptyState" class="empty-state" style="display: none;">
+        <i class="fas fa-home"></i>
+        <h3>No Properties Found</h3>
+        <p>There are no properties matching your criteria. Try adjusting your filters or check back later.</p>
+        <a href="upload.html" class="btn btn-primary">
+          <i class="fas fa-plus"></i>
+          List Your Property
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Modal -->
+  <div class="modal-overlay" id="contactModal">
+    <div class="modal">
+      <h3><i class="fas fa-lock" style="color: var(--primary-color);"></i> Unlock Contact Information</h3>
+      <p>To view the owner's contact details and arrange a viewing, you need to pay a small commission fee.</p>
+      
+      <div class="commission-info" style="margin-bottom: 20px;">
+        <p><strong>Property:</strong> <span id="modalPropertyTitle">-</span></p>
+        <p><strong>Commission Fee:</strong> <span id="modalCommissionFee" style="color: var(--primary-color); font-size: 20px; font-weight: 600;">-</span></p>
+      </div>
+      
+      <p style="font-size: 14px; color: var(--text-light);">This fee helps us ensure serious inquiries and protect property owners from spam.</p>
+      
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="processPayment()">
+          <i class="fas fa-credit-card"></i>
+          Pay & Unlock
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">
+            <i class="fas fa-home"></i>
+            Home<span>Connect</span>
+          </a>
+          <p>Your trusted platform for direct property transactions. Connect with property owners and find your dream home without middlemen.</p>
+          <div class="footer-social">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        
+        <div>
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="properties.html">Properties</a></li>
+            <li><a href="upload.html">List Property</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4>Services</h4>
+          <ul class="footer-links">
+            <li><a href="#">Buy Property</a></li>
+            <li><a href="#">Sell Property</a></li>
+            <li><a href="#">Rent Property</a></li>
+            <li><a href="#">Property Valuation</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4>Contact Us</h4>
+          <ul class="footer-contact">
+            <li>
+              <i class="fas fa-phone"></i>
+              <div>
+                <div>07087008275</div>
+                <div>08127372476</div>
+              </div>
+            </li>
+            <li>
+              <i class="fas fa-envelope"></i>
+              <span>chuksmichael16@gmail.com</span>
+            </li>
+            <li>
+              <i class="fas fa-map-marker-alt"></i>
+              <span>Nigeria</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2024 HomeConnect. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Header scroll effect
+    window.addEventListener('scroll', function() {
+      const header = document.getElementById('header');
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // Mobile menu toggle
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      mobileMenu.classList.toggle('active');
+    }
+
+    // Sample properties data (in real app, this comes from a database)
+    const sampleProperties = [
+      {
+        id: 1,
+        title: 'Luxury 4 Bedroom Duplex',
+        type: 'duplex',
+        listingType: 'sale',
+        price: 45000000,
+        location: 'Lekki Phase 1, Lagos',
+        state: 'lagos',
+        bedrooms: 4,
+        bathrooms: 5,
+        size: 450,
+        image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800',
+        description: 'Beautiful luxury duplex with modern amenities, swimming pool, and 24/7 power supply.',
+        ownerName: 'John Doe',
+        ownerPhone: '08012345678',
+        date: '2024-01-15'
+      },
+      {
+        id: 2,
+        title: '3 Bedroom Apartment',
+        type: 'apartment',
+        listingType: 'rent',
+        price: 2500000,
+        location: 'Garki, Abuja',
+        state: 'abuja',
+        bedrooms: 3,
+        bathrooms: 3,
+        size: 200,
+        image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800',
+        description: 'Spacious apartment in a secure estate with parking space and good road access.',
+        ownerName: 'Jane Smith',
+        ownerPhone: '08087654321',
+        date: '2024-01-10'
+      },
+      {
+        id: 3,
+        title: '5 Bedroom Mansion',
+        type: 'house',
+        listingType: 'sale',
+        price: 85000000,
+        location: 'GRA Phase 3, Port Harcourt',
+        state: 'rivers',
+        bedrooms: 5,
+        bathrooms: 6,
+        size: 800,
+        image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
+        description: 'Executive mansion with swimming pool, gym, cinema room, and ample parking.',
+        ownerName: 'Chief Emmanuel',
+        ownerPhone: '07098765432',
+        date: '2024-01-05'
+      },
+      {
+        id: 4,
+        title: '2 Bedroom Flat',
+        type: 'apartment',
+        listingType: 'rent',
+        price: 800000,
+        location: 'Challenge, Ibadan',
+        state: 'oyo',
+        bedrooms: 2,
+        bathrooms: 2,
+        size: 120,
+        image: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800',
+        description: 'Clean and well-maintained flat in a peaceful neighborhood.',
+        ownerName: 'Mrs. Adebayo',
+        ownerPhone: '08123456789',
+        date: '2024-01-08'
+      },
+      {
+        id: 5,
+        title: 'Commercial Shop Space',
+        type: 'commercial',
+        listingType: 'rent',
+        price: 500000,
+        location: 'Sabon Gari, Kano',
+        state: 'kano',
+        bedrooms: 0,
+        bathrooms: 1,
+        size: 50,
+        image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800',
+        description: 'Prime location shop space suitable for retail business.',
+        ownerName: 'Alhaji Ibrahim',
+        ownerPhone: '07012345678',
+        date: '2024-01-12'
+      },
+      {
+        id: 6,
+        title: '3 Bedroom Bungalow',
+        type: 'bungalow',
+        listingType: 'sale',
+        price: 18000000,
+        location: 'Trans Ekulu, Enugu',
+        state: 'other',
+        bedrooms: 3,
+        bathrooms: 3,
+        size: 350,
+        image: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800',
+        description: 'Lovely bungalow with spacious compound and garden area.',
+        ownerName: 'Mr. Okonkwo',
+        ownerPhone: '08056789123',
+        date: '2024-01-14'
+      }
+    ];
+
+    let currentProperties = [];
+    let selectedProperty = null;
+
+    // Load properties
+    function loadProperties() {
+      // Get properties from localStorage (user uploaded)
+      const userProperties = JSON.parse(localStorage.getItem('properties') || '[]');
+      
+      // Combine with sample properties
+      currentProperties = [...sampleProperties, ...userProperties];
+      
+      // Display properties
+      displayProperties(currentProperties);
+    }
+
+    // Display properties
+    function displayProperties(properties) {
+      const grid = document.getElementById('propertiesGrid');
+      const emptyState = document.getElementById('emptyState');
+      const resultsCount = document.getElementById('resultsCount');
+      
+      resultsCount.textContent = properties.length;
+      
+      if (properties.length === 0) {
+        grid.innerHTML = '';
+        emptyState.style.display = 'block';
+        return;
+      }
+      
+      emptyState.style.display = 'none';
+      
+      grid.innerHTML = properties.map(property => `
+        <div class="property-card">
+          <div class="property-image">
+            <img src="${property.image}" alt="${property.title}">
+            <span class="property-badge">${property.listingType === 'sale' ? 'For Sale' : 'For Rent'}</span>
+            <span class="property-price">₦${formatPrice(property.price)}</span>
+          </div>
+          <div class="property-content">
+            <h3>${property.title}</h3>
+            <div class="property-location">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>${property.location}</span>
+            </div>
+            <div class="property-features">
+              ${property.bedrooms ? `<span><i class="fas fa-bed"></i> ${property.bedrooms} Beds</span>` : ''}
+              ${property.bathrooms ? `<span><i class="fas fa-bath"></i> ${property.bathrooms} Baths</span>` : ''}
+              ${property.size ? `<span><i class="fas fa-expand"></i> ${property.size} sqm</span>` : ''}
+            </div>
+            <button class="btn btn-primary btn-full" style="margin-top: 15px;" onclick="showContactModal(${property.id})">
+              <i class="fas fa-phone"></i>
+              Contact Owner
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Format price
+    function formatPrice(price) {
+      if (price >= 1000000) {
+        return (price / 1000000).toFixed(1) + 'M';
+      } else if (price >= 1000) {
+        return (price / 1000).toFixed(0) + 'K';
+      }
+      return price.toString();
+    }
+
+    // Filter properties
+    function filterProperties() {
+      const type = document.getElementById('filterType').value;
+      const listing = document.getElementById('filterListing').value;
+      const state = document.getElementById('filterState').value;
+      const maxPrice = document.getElementById('filterPrice').value;
+      
+      let filtered = currentProperties.filter(property => {
+        if (type && property.type !== type) return false;
+        if (listing && property.listingType !== listing) return false;
+        if (state && property.state !== state) return false;
+        if (maxPrice && property.price > parseFloat(maxPrice)) return false;
+        return true;
+      });
+      
+      displayProperties(filtered);
+    }
+
+    // Clear filters
+    function clearFilters() {
+      document.getElementById('filterType').value = '';
+      document.getElementById('filterListing').value = '';
+      document.getElementById('filterState').value = '';
+      document.getElementById('filterPrice').value = '';
+      displayProperties(currentProperties);
+    }
+
+    // Show contact modal
+    function showContactModal(propertyId) {
+      selectedProperty = currentProperties.find(p => p.id === propertyId);
+      if (!selectedProperty) return;
+      
+      // Calculate commission
+      let commission = 5000;
+      if (selectedProperty.price >= 20000000) {
+        commission = 20000;
+      } else if (selectedProperty.price >= 5000000) {
+        commission = 10000;
+      }
+      
+      document.getElementById('modalPropertyTitle').textContent = selectedProperty.title;
+      document.getElementById('modalCommissionFee').textContent = '₦' + commission.toLocaleString();
+      
+      document.getElementById('contactModal').classList.add('active');
+    }
+
+    // Close modal
+    function closeModal() {
+      document.getElementById('contactModal').classList.remove('active');
+      selectedProperty = null;
+    }
+
+    // Process payment (demo)
+    function processPayment() {
+      if (!selectedProperty) return;
+      
+      // In a real app, this would integrate with a payment gateway
+      alert(`Payment successful!\n\nOwner Contact Information:\nName: ${selectedProperty.ownerName}\nPhone: ${selectedProperty.ownerPhone}\n\nYou can now contact the owner directly to arrange a viewing.`);
+      
+      closeModal();
+    }
+
+    // Close modal on overlay click
+    document.getElementById('contactModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeModal();
+      }
+    });
+
+    // Load properties on page load
+    window.addEventListener('load', loadProperties);
+  </script>
+  <script src="auth.js"></script>
+<script>
+  updateHeaderAuthUI();
+</script>
+
+</body>
+</html>
