@@ -251,6 +251,7 @@ app.post("/api/payments/initialize", authenticateToken, async (req, res) => {
       {
         email: user.email,
         amount: Number(amount) * 100, // kobo
+        callback_url: "https://real-estate-platform-r44e.onrender.com/properties.html",
         metadata: {
           propertyId,
           userId: user.id,

@@ -342,6 +342,9 @@
 
     let currentProperties = [];
     let selectedProperty = null;
+    
+    const API_URL = "https://real-estate-platform-r44e.onrender.com/api";
+
 
     // Load properties
     function loadProperties() {
@@ -458,15 +461,52 @@
       selectedProperty = null;
     }
 
-    // Process payment (demo)
-    function processPayment() {
-      if (!selectedProperty) return;
-      
-      // In a real app, this would integrate with a payment gateway
-      alert(`Payment successful!\n\nOwner Contact Information:\nName: ${selectedProperty.ownerName}\nPhone: ${selectedProperty.ownerPhone}\n\nYou can now contact the owner directly to arrange a viewing.`);
-      
-      closeModal();
+    // Process payment (Paystack)
+async function processPayment() {
+  if (!selectedProperty) return;
+
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Please sign in first.");
+    window.location.href = "login.html";
+    return;
+  }
+
+  // Commission = 0.05%
+  let commission = Math.round(Number(selectedProperty.price) * 0.0005);
+  if (commission < 1000) commission = 1000;
+
+  try {
+    // 1) Initialize payment
+    const initRes = await fetch(`${API_URL}/payments/initialize`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        propertyId: selectedProperty.id,
+        amount: commission
+      })
+    });
+
+    const initData = await initRes.json();
+
+    if (!initRes.ok) {
+      alert(initData.message || "Unable to start payment");
+      return;
     }
+
+    // 2) Redirect to Paystack payment page
+    const payUrl = initData.data.authorization_url;
+    window.location.href = payUrl;
+
+  } catch (error) {
+    console.error(error);
+    alert("Payment error. Please try again.");
+  }
+}
+
 
     // Close modal on overlay click
     document.getElementById('contactModal').addEventListener('click', function(e) {
