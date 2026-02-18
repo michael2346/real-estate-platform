@@ -292,6 +292,55 @@ app.get("/api/payments/verify/:reference", authenticateToken, async (req, res) =
       return res.status(400).json({ message: "Payment verification failed" });
     }
 
+    const transaction = paystackData.data;
+
+    // Must be successful
+    if (transaction.status !== "success") {
+      return res.status(400).json({
+        message: "Payment not successful",
+        transactionStatus: transaction.status
+      });
+    }
+
+    const metadata = transaction.metadata || {};
+    const propertyId = metadata.propertyId;
+
+    if (!propertyId) {
+      return res.status(400).json({ message: "Missing propertyId in metadata" });
+    }
+
+    // Save unlock record
+    const unlocks = readUnlocks();
+
+    const alreadyUnlocked = unlocks.find(
+      (u) => u.userId === req.user.id && u.propertyId === propertyId
+    );
+
+    if (!alreadyUnlocked) {
+      unlocks.push({
+        id: uuidv4(),
+        userId: req.user.id,
+        propertyId,
+        reference,
+        amount: transaction.amount / 100,
+        paidAt: new Date().toISOString()
+      });
+
+      writeUnlocks(unlocks);
+    }
+
+    return res.json({
+      message: "Payment verified and contact unlocked",
+      propertyId,
+      reference
+    });
+  } catch (error) {
+    console.error("Paystack verify error:", error.response?.data || error.message);
+    return res.status(500).json({ message: "Unable to verify payment" });
+  }
+});
+
+
     // Paystack transaction details
     const transaction = paystackData.data;
 
@@ -651,3 +700,14 @@ app.listen(PORT, () => {
 });
 
 module.exports = app;
+app.get("/api/unlocks/:propertyId", authenticateToken, (req, res) => {
+  const propertyId = req.params.propertyId;
+
+  const unlocks = readUnlocks();
+
+  const unlocked = unlocks.some(
+    (u) => u.userId === req.user.id && u.propertyId === propertyId
+  );
+
+  res.json({ unlocked });
+});
