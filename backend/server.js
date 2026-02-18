@@ -45,7 +45,28 @@ const readUsers = () => {
   } catch (error) {
     return [];
   }
+  
 };
+const UNLOCKS_FILE = path.join(__dirname, 'data', 'unlocks.json');
+
+if (!fs.existsSync(UNLOCKS_FILE)) {
+  fs.writeFileSync(UNLOCKS_FILE, JSON.stringify([], null, 2));
+}
+
+const readUnlocks = () => {
+  try {
+    const data = fs.readFileSync(UNLOCKS_FILE, 'utf8');
+    return JSON.parse(data);
+  } catch (err) {
+    return [];
+  }
+};
+
+const writeUnlocks = (unlocks) => {
+  fs.writeFileSync(UNLOCKS_FILE, JSON.stringify(unlocks, null, 2));
+};
+
+
 
 const writeUsers = (users) => {
   fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
@@ -251,16 +272,10 @@ app.post("/api/payments/initialize", authenticateToken, async (req, res) => {
   }
 });
 
-// Verify Paystack Payment
+// Verify Paystack Payment and Save Unlock
 app.get("/api/payments/verify/:reference", authenticateToken, async (req, res) => {
   try {
     const reference = req.params.reference;
-
-    if (!PAYSTACK_SECRET_KEY) {
-      return res.status(500).json({
-        message: "PAYSTACK_SECRET_KEY is missing in environment variables"
-      });
-    }
 
     const response = await axios.get(
       `https://api.paystack.co/transaction/verify/${reference}`,
@@ -271,12 +286,72 @@ app.get("/api/payments/verify/:reference", authenticateToken, async (req, res) =
       }
     );
 
-    return res.json(response.data);
+    const paystackData = response.data;
+
+    if (!paystackData.status) {
+      return res.status(400).json({ message: "Payment verification failed" });
+    }
+
+    // Paystack transaction details
+    const transaction = paystackData.data;
+
+    if (transaction.status !== "success") {
+      return res.status(400).json({
+        message: "Payment not successful",
+        transactionStatus: transaction.status
+      });
+    }
+
+    const metadata = transaction.metadata || {};
+    const propertyId = metadata.propertyId;
+
+    if (!propertyId) {
+      return res.status(400).json({ message: "Missing propertyId in metadata" });
+    }
+
+    // Save unlock record
+    const unlocks = readUnlocks();
+
+    const alreadyUnlocked = unlocks.find(
+      (u) => u.userId === req.user.id && u.propertyId === propertyId
+    );
+
+    if (!alreadyUnlocked) {
+      unlocks.push({
+        id: uuidv4(),
+        userId: req.user.id,
+        propertyId,
+        reference,
+        amount: transaction.amount / 100,
+        paidAt: new Date().toISOString()
+      });
+
+      writeUnlocks(unlocks);
+    }
+
+    return res.json({
+      message: "Payment verified and contact unlocked",
+      propertyId,
+      reference
+    });
   } catch (error) {
     console.error("Paystack verify error:", error.response?.data || error.message);
     return res.status(500).json({ message: "Unable to verify payment" });
   }
 });
+// Check if user has unlocked a property contact
+app.get("/api/unlocks/:propertyId", authenticateToken, (req, res) => {
+  const propertyId = req.params.propertyId;
+
+  const unlocks = readUnlocks();
+
+  const unlocked = unlocks.some(
+    (u) => u.userId === req.user.id && u.propertyId === propertyId
+  );
+
+  res.json({ unlocked });
+});
+
 
 
 // ============ PROPERTY ROUTES ============

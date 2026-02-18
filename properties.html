@@ -441,15 +441,13 @@
       if (!selectedProperty) return;
       
       // Calculate commission
-      let commission = 5000;
-      if (selectedProperty.price >= 20000000) {
-        commission = 20000;
-      } else if (selectedProperty.price >= 5000000) {
-        commission = 10000;
+      function calculateCommission(price) {
+      return Math.round(Number(price) * 0.0005);
       }
+
       
       document.getElementById('modalPropertyTitle').textContent = selectedProperty.title;
-      document.getElementById('modalCommissionFee').textContent = '₦' + commission.toLocaleString();
+      document.getElementById('modalCommissionFee').textContent = '₦' + calculateCommission(selectedProperty.price).toLocaleString();
       
       document.getElementById('contactModal').classList.add('active');
     }
