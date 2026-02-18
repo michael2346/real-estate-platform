@@ -6,10 +6,13 @@ const bodyParser = require('body-parser');
 const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
 const path = require('path');
+require("dotenv").config();
 
+const axios = require("axios");
+const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY;
 const app = express();
 const PORT = process.env.PORT || 3000;
-const JWT_SECRET = 'your-secret-key-change-this-in-production';
+const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret';
 
 // Middleware
 app.use(cors());
@@ -202,6 +205,79 @@ app.get('/api/auth/me', authenticateToken, (req, res) => {
   const { password: _, ...userWithoutPassword } = user;
   res.json({ user: userWithoutPassword });
 });
+
+// Initialize Paystack Payment (Unlock Seller Contact)
+app.post("/api/payments/initialize", authenticateToken, async (req, res) => {
+  try {
+    const { propertyId, amount } = req.body;
+
+    if (!propertyId || !amount) {
+      return res.status(400).json({
+        message: "propertyId and amount are required"
+      });
+    }
+
+    if (!PAYSTACK_SECRET_KEY) {
+      return res.status(500).json({
+        message: "PAYSTACK_SECRET_KEY is missing in environment variables"
+      });
+    }
+
+    const user = req.user;
+
+    const response = await axios.post(
+      "https://api.paystack.co/transaction/initialize",
+      {
+        email: user.email,
+        amount: Number(amount) * 100, // kobo
+        metadata: {
+          propertyId,
+          userId: user.id,
+          purpose: "unlock_contact"
+        }
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${PAYSTACK_SECRET_KEY}`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
+
+    return res.json(response.data);
+  } catch (error) {
+    console.error("Paystack initialize error:", error.response?.data || error.message);
+    return res.status(500).json({ message: "Unable to initialize payment" });
+  }
+});
+
+// Verify Paystack Payment
+app.get("/api/payments/verify/:reference", authenticateToken, async (req, res) => {
+  try {
+    const reference = req.params.reference;
+
+    if (!PAYSTACK_SECRET_KEY) {
+      return res.status(500).json({
+        message: "PAYSTACK_SECRET_KEY is missing in environment variables"
+      });
+    }
+
+    const response = await axios.get(
+      `https://api.paystack.co/transaction/verify/${reference}`,
+      {
+        headers: {
+          Authorization: `Bearer ${PAYSTACK_SECRET_KEY}`
+        }
+      }
+    );
+
+    return res.json(response.data);
+  } catch (error) {
+    console.error("Paystack verify error:", error.response?.data || error.message);
+    return res.status(500).json({ message: "Unable to verify payment" });
+  }
+});
+
 
 // ============ PROPERTY ROUTES ============
 
