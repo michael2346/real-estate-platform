@@ -392,7 +392,7 @@
               ${property.bathrooms ? `<span><i class="fas fa-bath"></i> ${property.bathrooms} Baths</span>` : ''}
               ${property.size ? `<span><i class="fas fa-expand"></i> ${property.size} sqm</span>` : ''}
             </div>
-            <button class="btn btn-primary btn-full" style="margin-top: 15px;" onclick="showContactModal(${property.id})">
+            <button class="btn btn-primary btn-full" style="margin-top: 15px;" onclick="showContactModal('${property.id}')">
               <i class="fas fa-phone"></i>
               Contact Owner
             </button>
