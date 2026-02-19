@@ -458,7 +458,7 @@
 
 
     async function showContactModal(propertyId) {
-  selectedProperty = currentProperties.find(p => p.id === propertyId);
+  selectedProperty = currentProperties.find(p => String(p.id) === String(propertyId));
   if (!selectedProperty) return;
 
   const token = localStorage.getItem("token");
