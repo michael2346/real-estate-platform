@@ -342,7 +342,7 @@
 
     let currentProperties = [];
     let selectedProperty = null;
-    
+
     const API_URL = "https://real-estate-platform-r44e.onrender.com/api";
 
 
@@ -435,31 +435,72 @@
       document.getElementById('filterListing').value = '';
       document.getElementById('filterState').value = '';
       document.getElementById('filterPrice').value = '';
-      displayProperties(currentProperties);
+      displayProperties(currentProperties)
     }
+    async function checkIfUnlocked(propertyId) {
+  const token = localStorage.getItem("token");
+  if (!token) return false;
 
-    // Show contact modal
-    function showContactModal(propertyId) {
-      selectedProperty = currentProperties.find(p => p.id === propertyId);
-      if (!selectedProperty) return;
-      
-      // Calculate commission
-      function calculateCommission(price) {
-      return Math.round(Number(price) * 0.0005);
+  try {
+    const res = await fetch(`${API_URL}/unlocks/${propertyId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
       }
+    });
 
-      
-      document.getElementById('modalPropertyTitle').textContent = selectedProperty.title;
-      document.getElementById('modalCommissionFee').textContent = '₦' + calculateCommission(selectedProperty.price).toLocaleString();
-      
-      document.getElementById('contactModal').classList.add('active');
-    }
+    const data = await res.json();
+    return data.unlocked === true;
+  } catch (err) {
+    console.error("Unlock check error:", err);
+    return false;
+  }
+}
 
-    // Close modal
-    function closeModal() {
-      document.getElementById('contactModal').classList.remove('active');
-      selectedProperty = null;
-    }
+
+    async function showContactModal(propertyId) {
+  selectedProperty = currentProperties.find(p => p.id === propertyId);
+  if (!selectedProperty) return;
+
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Please sign in first.");
+    window.location.href = "login.html";
+    return;
+  }
+
+  // Check unlock status
+  const unlocked = await checkIfUnlocked(propertyId);
+
+  // Commission (0.05% of price)
+  let commission = Math.round(Number(selectedProperty.price) * 0.0005);
+  if (commission < 1000) commission = 1000;
+
+  const contactModal = document.getElementById("contactModal");
+  const contactInfo = document.getElementById("contactInfo");
+  const unlockSection = document.getElementById("unlockSection");
+  const commissionAmount = document.getElementById("commissionAmount");
+
+  commissionAmount.textContent = `₦${commission.toLocaleString()}`;
+
+  if (unlocked) {
+    // Show contact
+    contactInfo.innerHTML = `
+      <p><strong>Name:</strong> ${selectedProperty.contactName || "Not available"}</p>
+      <p><strong>Phone:</strong> ${selectedProperty.contactPhone || "Not available"}</p>
+      <p><strong>Email:</strong> ${selectedProperty.contactEmail || "Not available"}</p>
+    `;
+
+    contactInfo.style.display = "block";
+    unlockSection.style.display = "none";
+  } else {
+    // Locked
+    contactInfo.style.display = "none";
+    unlockSection.style.display = "block";
+  }
+
+  contactModal.style.display = "flex";
+}
+
 
     // Process payment (Paystack)
 async function processPayment() {
@@ -506,6 +547,40 @@ async function processPayment() {
     alert("Payment error. Please try again.");
   }
 }
+async function verifyPaystackPayment(reference) {
+  const token = localStorage.getItem("token");
+  if (!token) return;
+
+  try {
+    const res = await fetch(`${API_URL}/payments/verify/${reference}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("Payment successful! Seller contact unlocked.");
+
+      // Remove reference from URL (clean URL)
+      const url = new URL(window.location.href);
+      url.searchParams.delete("reference");
+      window.history.replaceState({}, document.title, url.toString());
+
+      // Reload properties so UI updates
+      loadProperties();
+    } else {
+      console.log(data);
+      alert(data.message || "Payment verification failed.");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Error verifying payment.");
+  }
+}
+
 
 
     // Close modal on overlay click
@@ -514,9 +589,49 @@ async function processPayment() {
         closeModal();
       }
     });
+    async function verifyPaystackPayment(reference) {
+  const token = localStorage.getItem("token");
+  if (!token) return;
+
+  try {
+    const res = await fetch(`${API_URL}/payments/verify/${reference}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("Payment successful! Seller contact unlocked.");
+
+      // Clean URL
+      const url = new URL(window.location.href);
+      url.searchParams.delete("reference");
+      window.history.replaceState({}, document.title, url.toString());
+
+      loadProperties();
+    } else {
+      console.log(data);
+      alert(data.message || "Payment verification failed.");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Error verifying payment.");
+  }
+}
+
 
     // Load properties on page load
     window.addEventListener('load', loadProperties);
+    // If Paystack redirects back with reference
+    const urlParams = new URLSearchParams(window.location.search);
+    const reference = urlParams.get("reference");
+    if (reference) {
+      verifyPaystackPayment(reference);
+    }
+
   </script>
   <script src="auth.js"></script>
 <script>
